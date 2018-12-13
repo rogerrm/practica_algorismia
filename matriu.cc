@@ -66,7 +66,57 @@ void matriu::mapeig_per_conjunts(){
 }
 
 void matriu::mapeig_final(){
-	map<string,int> map_general;
+	
+	
+	for (int i = 0; i < nombre_documents; ++i){
+		//Entro al document i afegeixo la paraula
+		map<string,int>::iterator it;
+		for(it=mapeig_documents[i].begin(); it!= mapeig_documents[i].end(); ++it){
+			map_general[it->first] = it->second;
+		}
+	}
+	cout << endl;
+	int contador = map_general.size(); //Contador hi haura el nombre total de kshingles
+	map<string,int>::iterator it;
+	for(it=map_general.begin(); it!= map_general.end(); ++it){
+		map_general[it->first] = it->second;
+		cout <<it->first << "->"<< map_general[it->first]<<endl;
+	}
+	cout << contador << "<-contadora"<<endl;
+	
+}	
+
+vector<vector<bool>> matriu::matriu_caracterisica(){
+	int num_k_shingles = map_general.size();
+	matriu_a_retornar = vector<vector<bool> >(100,vector<bool>(100));
+	cout <<"1r" <<num_k_shingles << endl;
+	cout << nombre_documents<<endl;
+	cout << "mapeig-doc-size->"<<mapeig_documents.size()<<endl;
+	
+	map<string,int>::iterator it;
+	int contador = 0;
+	for(it = map_general.begin(); it != map_general.end(); ++it){
+		for(int j = 0; j < nombre_documents; ++j){
+			if(mapeig_documents[j].find(it->first) != mapeig_documents[j].end()){
+				matriu_a_retornar[contador][j] = true;
+			}
+			else{
+				matriu_a_retornar[contador][j] = false;
+			}
+		}
+		
+		++contador;
+	
+	}
+	
+	cout << "UOI"<<endl;
+	for(int i = 0; i < num_k_shingles; ++i){
+		for(int j = 0; j < nombre_documents; ++j){
+			cout << matriu_a_retornar[i][j]<<" ";
+		}
+		cout << endl;
+	}
+	return matriu_a_retornar;
 }
 
 matriu::matriu(int k, vector<vector<string> > documents) {
@@ -78,6 +128,8 @@ matriu::matriu(int k, vector<vector<string> > documents) {
 	
     construir_kshingles();
     mapeig_per_conjunts();
+    mapeig_final();
+    matriu_caracterisica();
     /*hashShingles();
     generateUniversal();    
     computeCM();*/

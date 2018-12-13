@@ -28,7 +28,7 @@ class matriu{
 		map<string,int> map_general; //Hi guardare el map general per saber nombre k-shingles
 		VSS paraules_documents; //Servirà per passar la informacio a la classe amb totes les paraules dels documents
 		vector<vector<string> > kshingles_resultants; //Servira per guardar els kshingles que es crein
-		
+		VBB matriu_a_retornar;
 		//FUNCIONS
 		
 		//CONSTRUCTORA
