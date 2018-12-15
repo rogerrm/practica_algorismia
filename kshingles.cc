@@ -107,6 +107,6 @@ int main(){
 	}
 	
 	matriu primera(9,entrada);
-	primera.calcular_similitud(0,1);
+	primera.calcular_similitud(1,3);
 
 }
