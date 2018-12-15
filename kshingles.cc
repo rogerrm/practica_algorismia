@@ -6,77 +6,87 @@
 #include <vector>
 #include <string>
 #include <functional>
-	#include "matriu.h"
+#include "matriu.h"
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <iterator>
+#include <sys/types.h>
+#include <dirent.h>
+
 using namespace std;
+
+typedef std::vector<std::string> stringvec;
 
 vector<string> total;
 int contador = 0;
 map<string,int> mappeig;
+vector <vector <string> > entrada;
+stringvec v;
+
 
 void llegir_documents(){
-	string paraula;
-	ifstream infile;
-	infile.open("out.txt");
-	while(infile >> paraula){
-	//cout << paraula << endl;
-		if (paraula.size()>= 9){
-			for (int i = 0; i <= int(paraula.size()) - 9; ++i){
-				string r = paraula.substr(i, 9);
-				total.push_back(r); 
-				//cout << "->"<<i<<"->"<<8+i;
-				//cout << r << endl;			
-			}
-		}
-		else{
-			total.push_back(paraula);
+	cout <<endl;
+	vector<string> noms;
+	string cami = "./documents/";
+	//Hi copiare tots els noms excepte . i ..
+	for (int i = 0; i < int(v.size()); ++i){
+		if(string(v[i]) != "." and string(v[i])!= ".."){
+			noms.push_back(string(v[i]));
 		}
 	}
-	infile.close();
-	
-	
-	infile.open("out1.txt");
-	while(infile >> paraula){
-	//cout << paraula << endl;
-		if (paraula.size()>= 9){
-			for (int i = 0; i <= int(paraula.size()) - 9; ++i){
-				string r = paraula.substr(i, 9);
-				total.push_back(r); 
-				//cout << "->"<<i<<"->"<<8+i;
-				//cout << r << endl;			
+	entrada = vector<vector<string> >(int(noms.size()));
+	for (int i = 0; i < int(noms.size()); ++i){
+		string paraula;
+		ifstream infile;
+		string converter;
+		converter = cami + noms[i];
+		infile.open(converter);
+			while(infile >> paraula){
+				if (paraula.size()>= 9){
+					for (int k = 0; k <= int(paraula.size()) - 9; ++k){
+						string r = paraula.substr(k, 9);
+						entrada[i].push_back(r);			
+					}
+				}
+				else{
+					entrada[i].push_back(paraula);
+				}
 			}
-		}
-		else{
-			total.push_back(paraula);
-		}
+			infile.close();		
 	}
-	
 }
 
 
 
+void read_directory(const std::string& name, stringvec& v)
+{
+    DIR* dirp = opendir(name.c_str());
+    struct dirent * dp;
+    while ((dp = readdir(dirp)) != NULL) {
+        v.push_back(dp->d_name);
+    }
+    closedir(dirp);
+}
+
+
 int main(){
 	
+	/*vector<vector<string> > entradaa;
+	entradaa = vector<vector<string>>(3); //no li he de passar cap parametre mes, sino els inicialitza a buits
 	
-	
-	//Aquest programa nomes llegira els documents i cridara a una classe matriu que et retornara matriu caracteristica
-	
-	/*vector<char> v(5);
-	v[0]='a';
-	v[1]='b';
-	v[2]='c';
-	v[3]='e';
-	string str(v.begin(),v.begin()+2);
-	cout << str << endl;*/
-	
-	
-	vector<vector<string> > entrada;
-	entrada = vector<vector<string>>(2); //no li he de passar cap parametre mes, sino els inicialitza a buits
-	
-	entrada[0].push_back("hola");	
-	entrada[0].push_back("holaa");
-	entrada[1].push_back("holaa");
-	entrada[1].push_back("holaaaaaaaaaa");
-	
+	entradaa[0].push_back("abcddefghijklm");	
+	entradaa[0].push_back("abchijklm");	
+	entradaa[0].push_back("abcdefghijklmno");
+	entradaa[1].push_back("abcdefghijklmnop");
+	entradaa[1].push_back("abcdefghijklmn");
+	entradaa[1].push_back("abcdefghijklmnopq");
+	entradaa[2].push_back("abcdefghijk");
+	entradaa[2].push_back("abcdefghijkl");*/
+
+    read_directory("./documents", v);
 	
 	/*for(int i = 0; i < entrada.size(); ++i){
 		for(int j = 0; j < entrada[i].size(); ++j){
@@ -85,8 +95,18 @@ int main(){
 		cout << endl;
 	}*/
 	
-	matriu primera(9,entrada);
+	
 
-	//llegir_documents();
+	llegir_documents();
+	cout << "------------------------------------------"<<endl;
+	for (int i = 0; i < int(entrada.size()); ++i){
+		for (int j = 0; j < int(entrada[i].size()); ++j){
+			cout <<entrada[i][j]<<" ";
+		}cout <<endl;
+		cout << "----------"<<endl;
+	}
+	
+	matriu primera(9,entrada);
+	primera.calcular_similitud(0,1);
 
 }

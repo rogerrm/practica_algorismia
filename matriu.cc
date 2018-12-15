@@ -53,9 +53,9 @@ void matriu::mapeig_per_conjunts(){
 	}
 	for (int i = 0; i < int(mapeig_documents.size()); ++i){
 		map<string,int>::iterator it;
-		cout << "El document "<<i<<"s'ha mapejat a"<<endl;
+		//cout << "El document "<<i<<"s'ha mapejat a"<<endl;
 		for(it = mapeig_documents[i].begin(); it != mapeig_documents[i].end(); ++it){
-			cout << it->first<<"->"<<it->second<<" ";
+			//cout << it->first<<"->"<<it->second<<" ";
 		}
 		cout << endl;
 	}
@@ -80,18 +80,18 @@ void matriu::mapeig_final(){
 	map<string,int>::iterator it;
 	for(it=map_general.begin(); it!= map_general.end(); ++it){
 		map_general[it->first] = it->second;
-		cout <<it->first << "->"<< map_general[it->first]<<endl;
+		//cout <<it->first << "->"<< map_general[it->first]<<endl;
 	}
-	cout << contador << "<-contadora"<<endl;
+	//cout << contador << "<-contadora"<<endl;
 	
 }	
 
 vector<vector<bool>> matriu::matriu_caracterisica(){
-	int num_k_shingles = map_general.size();
-	matriu_a_retornar = vector<vector<bool> >(100,vector<bool>(100));
-	cout <<"1r" <<num_k_shingles << endl;
-	cout << nombre_documents<<endl;
-	cout << "mapeig-doc-size->"<<mapeig_documents.size()<<endl;
+	num_k_shingles = int(map_general.size());
+	matriu_a_retornar = vector<vector<bool> >(num_k_shingles,vector<bool>(nombre_documents));
+	//cout <<"1r" <<num_k_shingles << endl;
+	//cout << nombre_documents<<endl;
+	//cout << "mapeig-doc-size->"<<mapeig_documents.size()<<endl;
 	
 	map<string,int>::iterator it;
 	int contador = 0;
@@ -99,6 +99,7 @@ vector<vector<bool>> matriu::matriu_caracterisica(){
 		for(int j = 0; j < nombre_documents; ++j){
 			if(mapeig_documents[j].find(it->first) != mapeig_documents[j].end()){
 				matriu_a_retornar[contador][j] = true;
+				//cout << it->first <<endl;
 			}
 			else{
 				matriu_a_retornar[contador][j] = false;
@@ -109,7 +110,7 @@ vector<vector<bool>> matriu::matriu_caracterisica(){
 	
 	}
 	
-	cout << "UOI"<<endl;
+	//cout << "UOI"<<endl;
 	for(int i = 0; i < num_k_shingles; ++i){
 		for(int j = 0; j < nombre_documents; ++j){
 			cout << matriu_a_retornar[i][j]<<" ";
@@ -117,6 +118,17 @@ vector<vector<bool>> matriu::matriu_caracterisica(){
 		cout << endl;
 	}
 	return matriu_a_retornar;
+}
+
+int matriu::calcular_similitud(int a, int b){
+	int contador_1 = 0;
+	int contador_2 = 0;
+	for(int i= 0; i < num_k_shingles; ++i){
+		if((matriu_a_retornar[i][a] == 1) and ( matriu_a_retornar[i][b] == 1)) ++contador_1;
+		if(not((matriu_a_retornar[i][a] == 0) and ( matriu_a_retornar[i][b] == 0))) ++contador_2;
+	}
+	cout << double(contador_1) / double(contador_2)<<endl;
+	return double(contador_1) / double(contador_2);
 }
 
 matriu::matriu(int k, vector<vector<string> > documents) {
@@ -130,6 +142,7 @@ matriu::matriu(int k, vector<vector<string> > documents) {
     mapeig_per_conjunts();
     mapeig_final();
     matriu_caracterisica();
+    //calcular_similitud(0,1);
     /*hashShingles();
     generateUniversal();    
     computeCM();*/

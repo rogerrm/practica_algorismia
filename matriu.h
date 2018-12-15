@@ -22,6 +22,8 @@ class matriu{
 	public:
 		int nombre_documents;
 		int num_shingles;
+		int num_k_shingles; //ES EL NOMBRE TOTAL DE KSHINGLES QUE HEM TROBAT
+		
 		//Tot el que ens hem de guardar per implementar la classe es
 		
 		vector<map<string,int>> mapeig_documents; //Hi guardarem mappeig de cada document
@@ -35,6 +37,7 @@ class matriu{
 		matriu(int k, VSS docs);
 		//RECOLLIR LA MATRIU CARACTERÍSTICA
 		VBB matriu_caracterisica();
+		int calcular_similitud(int a, int b);
 		
 		
 	private:
