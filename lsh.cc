@@ -1,29 +1,83 @@
-#include <vector>
-#include <iostream>
-#include <vector>
+#include "lsh.h"
+#include<bits/stdc++.h> 
 
-
-using namespace std;
-
-class lsh{
-
-	public:
+lsh::lsh(vector <vector <int> > matriu_signatures){
+	this->matriu_signatures = matriu_signatures;
+	this->tamany_signatures = int(matriu_signatures.size());
+	this->nombre_documents = int(matriu_signatures[0].size());
+	double semblanca;
+	cout << "Entra la similitud per la que desitjes filtrar els documents"<<endl;
+	cin >> semblanca;
+	this->similitud = semblanca;
+	cout << "la similitud entrada es"<<semblanca<<endl;
+	cout << "Entra nombre de bandes"<<endl;
+	cin >> bandes;
+	this->bandes = bandes;
+	this->n = tamany_signatures / bandes;
 	
-	double similitud;
-	int bandes; //nombre de bandes
-	int n; //nombre de files per banda
-	int tamany_signatures;
-	int nombre_documents;
-	vector<pair<int,int> > candidats; //Hi guardare els candidats a la similitud buscada
-	vector<vector<int> > matriu_signatures;
-	vector<vector<int> > resultats_hash;
+	cout << "nombre bandes"<<bandes<<endl;
+	cout << "tamany_total"<<tamany_signatures<<endl;
+	cout << "nombre files/banda"<<n<<endl;
+	
+	similars();
+	
+	/*cout << "---------------------------------------->"<<endl;
+	for (int i = 0; i < tamany_signatures; ++i){
+		if((i % n) == 0) cout << endl;
+		for (int j = 0; j < nombre_documents; ++j){
+			cout << matriu_signatures[i][j]<<" ";
+		}
+		cout << endl;
+	}*/
+}
 
+void lsh::similars(){
+	//Busquem tots els que tinguin similitud >= parametre
+	hash<int> hash_columna;
+	resultats_hash = vector<vector<int> >(n*bandes,vector<int>(nombre_documents)); 
 	
-	lsh(vector<vector<int> > matriu_signatures);
-	
-	private:
-	
-	//Necessitem funcio que retorni els parells similars en funcio d'un parametre i la seva similitud real
-	void similars();
-	double similitud_jaccard(int a, int b);
-};
+	for (int i = 0; i < bandes; ++i){
+		vector<pair<int,int>>total(0);
+		//HI GUARDEM ELS VALORS DE HASH
+		for (int j = 0; j < nombre_documents; ++j){
+			//hem de posar la columna a un int
+			long long int suma = 0;
+			int producte = 1;
+			for (int k = 0; k < n; ++k){
+				suma += producte * matriu_signatures[n*i + k][j];
+				producte *= 10;
+			}
+			resultats_hash[i][j] = hash_columna(suma);
+			total.push_back(make_pair(hash_columna(suma),j));
+		}
+		
+		//HEM DE MIRAR SI 2 HAN ANAT AL MATEIX LLOC, EN CAS QUE SI ELS AFEGIM A CANDIDATS
+		sort(total.begin(),total.end());
+		for (int i = 1; i < int(total.size()); ++i){
+			if(total[i].first == total[i-1].first){
+				candidats.push_back(make_pair(total[i-1].second,total[i].second));
+				cout << "AFEGIT->"<<total[i-1].second<<endl;
+			}
+		}
+	}
+	//Ara volem saber si realment els candidats que tenim tenen la similitud esperada o no
+	vector<pair<int,int> >definitius;
+	for (int i = 0; i < int(candidats.size()); ++i){
+		pair<int,int> primer = candidats[i];
+		if(similitud_jaccard(primer.first, primer.second)>= similitud){
+			definitius.push_back(make_pair(primer.first, primer.second));
+		}
+	}
+	cout << "Els parells que tenen similitud de Jaccard >="<<similitud<<"son:"<<endl;
+	for (int i = 0; i < int(definitius.size()); ++i){
+		cout<<definitius[i].first<<","<<definitius[i].second<<endl;
+	}
+}
+
+double lsh::similitud_jaccard(int a, int b){
+	double contador = 0;
+	for (int i = 0; i < tamany_signatures; ++i){
+		if(matriu_signatures[i][a] ==  matriu_signatures[i][b]) ++contador;
+	}
+	return (double(contador)/double(tamany_signatures));
+}
