@@ -76,7 +76,8 @@ int main() {
 
 	llegir_documents();
 
-	matriu m(9, entrada, true);
+	matriu m(9, entrada, false);
 
-	m.minihash_signature(100);
+	// m.minihash_signature(100);
+	cout << m.calcular_similitud_minihash(3, 4, 100) << endl;
 }

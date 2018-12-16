@@ -42,7 +42,8 @@ class matriu{
 		//RECOLLIR LA MATRIU CARACTERÍSTICA
 		VBB matriu_caracterisica();
 		VII minihash_signature(int t);
-		int calcular_similitud(int a, int b);
+		int calcular_similitud_kshingles(int a, int b);
+		int calcular_similitud_minihash(int a, int b, int t);
 		
 		
 	private:

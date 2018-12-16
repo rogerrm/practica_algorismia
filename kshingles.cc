@@ -98,6 +98,6 @@ int main(){
 
 
 	matriu primera(9,entrada,false);
-	primera.calcular_similitud(3,4);
+	primera.calcular_similitud_kshingles(3,4);
 
 }
