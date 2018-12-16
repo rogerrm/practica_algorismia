@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include "matriu.h"
+#include "Matriu.h"
 
 #include <iostream>
 #include <string>
@@ -51,8 +51,6 @@ void llegir_documents(){
 	}
 }
 
-
-
 void read_directory(const std::string& name, stringvec& v)
 {
     DIR* dirp = opendir(name.c_str());
@@ -63,41 +61,20 @@ void read_directory(const std::string& name, stringvec& v)
     closedir(dirp);
 }
 
-
 int main(){
-	
-	/*vector<vector<string> > entradaa;
-	entradaa = vector<vector<string>>(3); //no li he de passar cap parametre mes, sino els inicialitza a buits
-	
-	entradaa[0].push_back("abcddefghijklm");	
-	entradaa[0].push_back("abchijklm");	
-	entradaa[0].push_back("abcdefghijklmno");
-	entradaa[1].push_back("abcdefghijklmnop");
-	entradaa[1].push_back("abcdefghijklmn");
-	entradaa[1].push_back("abcdefghijklmnopq");
-	entradaa[2].push_back("abcdefghijk");
-	entradaa[2].push_back("abcdefghijkl");*/
-
     read_directory("./documents", v);
-	
-	/*for(int i = 0; i < entrada.size(); ++i){
-		for(int j = 0; j < entrada[i].size(); ++j){
-			cout << entrada[i][j]<<" ";
-		}
-		cout << endl;
-	}*/
 
 	llegir_documents();
-	cout << "------------------------------------------"<<endl;
-	for (int i = 0; i < int(entrada.size()); ++i){
-		for (int j = 0; j < int(entrada[i].size()); ++j){
-			cout <<entrada[i][j]<<" ";
-		}cout <<endl;
-		cout << "----------"<<endl;
+
+	cout << "Aquests son els documents llegits:" << endl;
+
+	for (int i = 2; i < int(v.size()); ++i) {
+		cout << v[i] << ' ';
 	}
+	cout << endl;
 
-
-	matriu primera(9,entrada,false);
-	primera.calcular_similitud_kshingles(3,4);
-
+	Matriu m(3,entrada,true);
+	cout << m.calcular_similitud_kshingles(2,3) << endl;
+	m.set_matriu_signatura(100000);
+	cout << m.calcular_similitud_minihash(2,3) << endl;
 }

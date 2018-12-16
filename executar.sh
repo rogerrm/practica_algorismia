@@ -1,4 +1,4 @@
 #!/bin/sh
-g++ kshingles.cc matriu.cc matriu.h 
+g++ kshingles.cc Matriu.cc Matriu.h 
 ./a.out
 

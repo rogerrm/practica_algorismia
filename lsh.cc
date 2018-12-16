@@ -20,15 +20,6 @@ lsh::lsh(vector <vector <int> > matriu_signatures){
 	cout << "nombre files/banda"<<n<<endl;
 	
 	similars();
-	
-	/*cout << "---------------------------------------->"<<endl;
-	for (int i = 0; i < tamany_signatures; ++i){
-		if((i % n) == 0) cout << endl;
-		for (int j = 0; j < nombre_documents; ++j){
-			cout << matriu_signatures[i][j]<<" ";
-		}
-		cout << endl;
-	}*/
 }
 
 void lsh::similars(){

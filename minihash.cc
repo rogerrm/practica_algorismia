@@ -6,7 +6,7 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include "matriu.h"
+#include "Matriu.h"
 
 #include <iostream>
 #include <string>
@@ -76,7 +76,7 @@ int main() {
 
 	llegir_documents();
 
-	matriu m(9, entrada, false);
+	Matriu m(9, entrada, false);
 
 	// m.minihash_signature(100);
 	cout << m.calcular_similitud_minihash(3, 4, 100) << endl;
