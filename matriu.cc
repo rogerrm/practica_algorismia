@@ -176,7 +176,7 @@ vector<vector<int> > matriu::minihash_signature(int t){
 	return sig;
 }
 
-int matriu::calcular_similitud(int a, int b){
+int matriu::calcular_similitud_kshingles(int a, int b){
 	int contador_1 = 0;
 	int contador_2 = 0;
 	for(int i= 0; i < num_k_shingles; ++i){
@@ -185,6 +185,18 @@ int matriu::calcular_similitud(int a, int b){
 	}
 	cout << double(contador_1) / double(contador_2)<<endl;
 	return double(contador_1) / double(contador_2);
+}
+
+int matriu::calcular_similitud_minihash(int a, int b, int t) {
+	vector<vector<int> > sig = minihash_signature(t);
+
+	float suma = 0.0;
+
+	for (int i = 0; i < t; ++i) {
+		if (sig[i][a] == sig[i][b]) suma += 1.0;
+	}
+
+	return suma/float(t);
 }
 
 matriu::matriu(int k, vector<vector<string> > documents, bool word) {
@@ -199,7 +211,7 @@ matriu::matriu(int k, vector<vector<string> > documents, bool word) {
     mapeig_per_conjunts();
     mapeig_final();
     matriu_caracterisica();
-    //calcular_similitud(0,1);
+    //calcular_similitud_kshingles(0,1);
     /*hashShingles();
     generateUniversal();    
     computeCM();*/
