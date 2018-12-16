@@ -1,5 +1,10 @@
 #include "matriu.h"
 #include <functional>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define INF 1e6
 
 void matriu::construir_kshingles(){
 	//Agafem la matriu de chars paraules_documents i el transformem en k-shingles.
@@ -7,20 +12,34 @@ void matriu::construir_kshingles(){
 	//PRIMER INICIALITZEM LA MATRIU KSHINGLES
 	kshingles_resultants = vector<vector<string> >(nombre_documents);
 	for (int i = 0; i < nombre_documents; ++i){
+		string doc = "";
 		for (int j = 0; j < int(paraules_documents[i].size()); ++j){
-			string paraula;
-			paraula = paraules_documents[i][j];
-			if (paraula.size()>num_shingles){
-				//Voldra dir que la podem dividir en kshingles
-				string r;
-				for(int k = 0; k <= int(paraula.size())-num_shingles; ++k){
-					r = paraula.substr(k,num_shingles);
-					kshingles_resultants[i].push_back(r);
-				}
+			doc = doc + paraules_documents[i][j] + " ";
+		}
+		if (word_shingles) {
+			if (int(doc.size()) <= num_shingles) {
+				kshingles_resultants[i].push_back(doc);
 			}
-			else{
-					kshingles_resultants[i].push_back(paraula);
+			for (int j = 0; j < int(doc.size())-num_shingles; ++j){
+				kshingles_resultants[i].push_back(doc.substr(j, num_shingles));
+			}
+		}
+		else {
+			for (int j = 0; j < int(paraules_documents[i].size()); ++j){
+				string paraula;
+				paraula = paraules_documents[i][j];
+				if (paraula.size()>num_shingles){
+					//Voldra dir que la podem dividir en kshingles
+					string r;
+					for(int k = 0; k <= int(paraula.size())-num_shingles; ++k){
+						r = paraula.substr(k,num_shingles);
+						kshingles_resultants[i].push_back(r);
+					}
 				}
+				else{
+						kshingles_resultants[i].push_back(paraula);
+					}
+			}
 		}
 	}
 	//ESCRIVIM LA MATRIU DE NOU
@@ -86,7 +105,7 @@ void matriu::mapeig_final(){
 	
 }	
 
-vector<vector<bool>> matriu::matriu_caracterisica(){
+vector<vector<bool> > matriu::matriu_caracterisica(){
 	num_k_shingles = int(map_general.size());
 	matriu_a_retornar = vector<vector<bool> >(num_k_shingles,vector<bool>(nombre_documents));
 	//cout <<"1r" <<num_k_shingles << endl;
@@ -120,6 +139,43 @@ vector<vector<bool>> matriu::matriu_caracterisica(){
 	return matriu_a_retornar;
 }
 
+vector<vector<int> > matriu::minihash_signature(int t){
+	srand (time(NULL));
+	vector<vector<bool> > matriu_car = matriu_caracterisica();
+
+	vector<vector<int> > sig = vector<vector<int> >(t, vector<int>(nombre_documents, INF));
+	
+	//Inicialitzem les funcions de hash
+	vector<int> funcions_hash(t);
+	for (int i = 0; i < t; ++i) {
+		funcions_hash[i] = rand()%num_k_shingles + 1;
+	}
+
+	//Recorrem la matriu de signatura per files per a calcular-la
+	for (int i = 0; i < num_k_shingles; ++i) {
+		//Ara recorrem per columnes
+		for (int j = 0; j < nombre_documents; ++j) {
+			//Si te un 1 a la posicio, actualitzem la matriu de signatura
+			if (matriu_car[i][j]) {
+				for (int k = 0; k < t; ++k){
+					if (sig[k][j] > (funcions_hash[k]*i+1)%num_k_shingles) {
+						sig[k][j] = (funcions_hash[k]*i+1)%num_k_shingles;
+					}
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < t; ++i) {
+		for (int j = 0; j < nombre_documents; ++j) {
+			cout << sig[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	return sig;
+}
+
 int matriu::calcular_similitud(int a, int b){
 	int contador_1 = 0;
 	int contador_2 = 0;
@@ -131,11 +187,12 @@ int matriu::calcular_similitud(int a, int b){
 	return double(contador_1) / double(contador_2);
 }
 
-matriu::matriu(int k, vector<vector<string> > documents) {
+matriu::matriu(int k, vector<vector<string> > documents, bool word) {
     num_shingles = k;
     //cout << "PRINCIPI"<<endl;
     paraules_documents = documents;
     nombre_documents = documents.size();
+    word_shingles = word;
    
 	
     construir_kshingles();

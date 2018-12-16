@@ -44,18 +44,10 @@ void llegir_documents(){
 		string converter;
 		converter = cami + noms[i];
 		infile.open(converter);
-			while(infile >> paraula){
-				if (paraula.size()>= 9){
-					for (int k = 0; k <= int(paraula.size()) - 9; ++k){
-						string r = paraula.substr(k, 9);
-						entrada[i].push_back(r);			
-					}
-				}
-				else{
-					entrada[i].push_back(paraula);
-				}
-			}
-			infile.close();		
+		while(infile >> paraula){
+			entrada[i].push_back(paraula);
+		}
+		infile.close();
 	}
 }
 
@@ -94,8 +86,6 @@ int main(){
 		}
 		cout << endl;
 	}*/
-	
-	
 
 	llegir_documents();
 	cout << "------------------------------------------"<<endl;
@@ -105,8 +95,9 @@ int main(){
 		}cout <<endl;
 		cout << "----------"<<endl;
 	}
-	
-	matriu primera(9,entrada);
-	primera.calcular_similitud(1,3);
+
+
+	matriu primera(9,entrada,false);
+	primera.calcular_similitud(3,4);
 
 }
