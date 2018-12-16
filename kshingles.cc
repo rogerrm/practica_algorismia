@@ -7,6 +7,7 @@
 #include <string>
 #include <functional>
 #include "Matriu.h"
+#include "lsh.h"
 
 #include <iostream>
 #include <string>
@@ -30,7 +31,7 @@ stringvec v;
 void llegir_documents(){
 	cout <<endl;
 	vector<string> noms;
-	string cami = "./documents/";
+	string cami = "./proves/";
 	//Hi copiare tots els noms excepte . i ..
 	for (int i = 0; i < int(v.size()); ++i){
 		if(string(v[i]) != "." and string(v[i])!= ".."){
@@ -62,19 +63,21 @@ void read_directory(const std::string& name, stringvec& v)
 }
 
 int main(){
-    read_directory("./documents", v);
+    read_directory("./proves", v);
 
 	llegir_documents();
 
 	cout << "Aquests son els documents llegits:" << endl;
 
-	for (int i = 2; i < int(v.size()); ++i) {
-		cout << v[i] << ' ';
+	for (int i = 0; i < int(v.size()); ++i) {
+		if(string(v[i]) != "." and string(v[i])!= ".."){
+			cout << v[i] << ' ';
+		}
 	}
 	cout << endl;
 
-	Matriu m(3,entrada,true);
+	Matriu m(9,entrada,true);
 	cout << m.calcular_similitud_kshingles(2,3) << endl;
-	m.set_matriu_signatura(100000);
+	m.set_matriu_signatura(10000);
 	cout << m.calcular_similitud_minihash(2,3) << endl;
 }

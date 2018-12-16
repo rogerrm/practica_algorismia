@@ -1,5 +1,6 @@
 #include "lsh.h"
-#include<bits/stdc++.h> 
+#include <vector>
+#include <functional>
 
 lsh::lsh(vector <vector <int> > matriu_signatures){
 	this->matriu_signatures = matriu_signatures;
@@ -9,7 +10,7 @@ lsh::lsh(vector <vector <int> > matriu_signatures){
 	cout << "Entra la similitud per la que desitjes filtrar els documents"<<endl;
 	cin >> semblanca;
 	this->similitud = semblanca;
-	cout << "la similitud entrada es"<<semblanca<<endl;
+	cout << "La similitud entrada es"<<semblanca<<endl;
 	cout << "Entra nombre de bandes"<<endl;
 	cin >> bandes;
 	this->bandes = bandes;
@@ -28,7 +29,7 @@ void lsh::similars(){
 	resultats_hash = vector<vector<int> >(n*bandes,vector<int>(nombre_documents)); 
 	
 	for (int i = 0; i < bandes; ++i){
-		vector<pair<int,int>>total(0);
+		vector<pair<int,int> >total(0);
 		//HI GUARDEM ELS VALORS DE HASH
 		for (int j = 0; j < nombre_documents; ++j){
 			//hem de posar la columna a un int
