@@ -15,11 +15,10 @@ typedef vector<VI> VII;
 typedef vector<string> VS;
 typedef vector<VS> VSS;
 
-Matriu::Matriu(int k, VSS documents, bool word) {
+Matriu::Matriu(int k, VSS documents) {
     llargada_shingles = k;
     paraules_documents = documents;
     nombre_documents = documents.size();
-    word_shingles = word;
    
     construir_kshingles();
     mapeig_per_conjunts();
@@ -66,34 +65,15 @@ void Matriu::construir_kshingles(){
 	//PRIMER INICIALITZEM LA Matriu KSHINGLES
 	kshingles_resultants = VSS(nombre_documents);
 	for (int i = 0; i < nombre_documents; ++i){
-		if (word_shingles) {
-			string doc = "";
-			for (int j = 0; j < int(paraules_documents[i].size()); ++j){
-				doc = doc + paraules_documents[i][j] + " ";
-			}
-			if (int(doc.size()) <= llargada_shingles) {
-				kshingles_resultants[i].push_back(doc);
-			}
-			for (int j = 0; j < int(doc.size())-llargada_shingles; ++j){
-				kshingles_resultants[i].push_back(doc.substr(j, llargada_shingles));
-			}
+		string doc = "";
+		for (int j = 0; j < int(paraules_documents[i].size()); ++j){
+			doc = doc + paraules_documents[i][j] + " ";
 		}
-		else {
-			for (int j = 0; j < int(paraules_documents[i].size()); ++j){
-				string paraula;
-				paraula = paraules_documents[i][j];
-				if (paraula.size()>llargada_shingles){
-					//Voldra dir que la podem dividir en kshingles
-					string r;
-					for(int k = 0; k <= int(paraula.size())-llargada_shingles; ++k){
-						r = paraula.substr(k,llargada_shingles);
-						kshingles_resultants[i].push_back(r);
-					}
-				}
-				else{
-					kshingles_resultants[i].push_back(paraula);
-				}
-			}
+		if (int(doc.size()) <= llargada_shingles) {
+			kshingles_resultants[i].push_back(doc);
+		}
+		for (int j = 0; j < int(doc.size())-llargada_shingles; ++j){
+			kshingles_resultants[i].push_back(doc.substr(j, llargada_shingles));
 		}
 	}
 }

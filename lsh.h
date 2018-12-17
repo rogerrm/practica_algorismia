@@ -7,7 +7,7 @@ using namespace std;
 class lsh{
 
 	public:
-		lsh(vector<vector<int> > matriu_signatures);
+		lsh(vector<vector<int> > matriu_signatures, double semblanca, int bandes);
 	
 	private:
 		double similitud;

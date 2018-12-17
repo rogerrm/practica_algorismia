@@ -2,23 +2,13 @@
 #include <vector>
 #include <functional>
 
-lsh::lsh(vector <vector <int> > matriu_signatures){
+lsh::lsh(vector <vector <int> > matriu_signatures, double semblanca, int bandes){
 	this->matriu_signatures = matriu_signatures;
 	this->tamany_signatures = int(matriu_signatures.size());
 	this->nombre_documents = int(matriu_signatures[0].size());
-	double semblanca;
-	cout << "Entra la similitud per la que desitjes filtrar els documents"<<endl;
-	cin >> semblanca;
 	this->similitud = semblanca;
-	cout << "La similitud entrada es"<<semblanca<<endl;
-	cout << "Entra nombre de bandes"<<endl;
-	cin >> bandes;
 	this->bandes = bandes;
 	this->n = tamany_signatures / bandes;
-	
-	cout << "nombre bandes"<<bandes<<endl;
-	cout << "tamany_total"<<tamany_signatures<<endl;
-	cout << "nombre files/banda"<<n<<endl;
 	
 	similars();
 }
@@ -48,7 +38,6 @@ void lsh::similars(){
 		for (int i = 1; i < int(total.size()); ++i){
 			if(total[i].first == total[i-1].first){
 				candidats.push_back(make_pair(total[i-1].second,total[i].second));
-				cout << "AFEGIT->"<<total[i-1].second<<endl;
 			}
 		}
 	}
@@ -60,7 +49,7 @@ void lsh::similars(){
 			definitius.push_back(make_pair(primer.first, primer.second));
 		}
 	}
-	cout << "Els parells que tenen similitud de Jaccard >="<<similitud<<"son:"<<endl;
+	cout << "Els parells que tenen similitud de Jaccard >="<<similitud<<" son:"<<endl;
 	for (int i = 0; i < int(definitius.size()); ++i){
 		cout<<definitius[i].first<<","<<definitius[i].second<<endl;
 	}

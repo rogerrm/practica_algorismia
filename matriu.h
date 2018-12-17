@@ -24,7 +24,7 @@ class Matriu{
 	
 	public:		
 		//CONSTRUCTORA
-		Matriu(int k, VSS docs, bool word);
+		Matriu(int k, VSS docs);
 
 		//GETTERS
 		VBB get_matriu_caracteristica();
@@ -42,7 +42,6 @@ class Matriu{
 		int nombre_documents; //Nombre de documents del corpus
 		int llargada_shingles; //Llargada dels shingles
 		int num_k_shingles; //Nombre total de shingles que hem trobat al corpus
-		bool word_shingles; //Si es true, es consideren els shingles a nivell de paraules. Si es false, a nivell de chars
 		int t_actual; //t de la signatura que hi ha actualment a memoria
 		
 		//Tot el que ens hem de guardar per implementar la classe es
